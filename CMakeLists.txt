@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(PROJECT_REVISION 1 CACHE INTERNAL "Project revision (CI)")
-project(cmake_template
+project(otus_task_06
     VERSION 0.0.${PROJECT_REVISION}
     DESCRIPTION "Infinite 2D matrix task"
     HOMEPAGE_URL "https://github.com/CityAplons/otus-cpp-06/tree/main"
