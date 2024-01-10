@@ -32,14 +32,19 @@ main(int argc, char const *argv[]) {
         std::cout << '\n';
     }
 
+    // Вывести количество занятых ячеек
     std::cout << matrix.size() << '\n';
 
+    // Вывести все занятые ячейки вместе со своими позициями.
     for (auto &&element : matrix) {
-        int x,y,value;
+        int x, y, value;
         std::tie(x, y, value) = element;
-        std::cout << x << '\t' << y << '\t' << value << std::endl;
+        std::cout << x << '\t' << y << '\t' << value << '\n';
     }
 
+    // Опционально реализовать каноническую форму оператора `=`
+    ((matrix[100][100] = 314) = 0) = 217;
+    std::cout << matrix[100][100] << std::endl;
 
     (void) argc;
     (void) argv;
