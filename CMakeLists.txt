@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(PROJECT_REVISION 1 CACHE INTERNAL "Project revision (CI)")
-project(cmake_template
+project(otus_task_06
     VERSION 0.0.${PROJECT_REVISION}
-    DESCRIPTION "General CMake template for C++ projects by N.Mikhailovskiy"
-    HOMEPAGE_URL "https://github.com/CityAplons/cmake-multiplatform-template"
+    DESCRIPTION "Infinite 2D matrix task"
+    HOMEPAGE_URL "https://github.com/CityAplons/otus-cpp-06/tree/main"
     LANGUAGES CXX
 )
 
-set_property(GLOBAL PROPERTY G_CXX_STANDARD 14)
+set_property(GLOBAL PROPERTY G_CXX_STANDARD 20)
 set_property(GLOBAL PROPERTY G_CXX_STANDARD_REQUIRED ON)
 
 # Include utility functions
@@ -27,21 +27,25 @@ target_include_directories(version
 )
 
 # Describe build targets
-add_executable(helloworld_cli src/hello.cpp)
-target_link_libraries(helloworld_cli PRIVATE
+add_library(matrix src/matrix.cpp)
+target_include_directories(matrix PUBLIC src)
+
+add_executable(task src/main.cpp)
+target_link_libraries(task PRIVATE
     version
+    matrix
 )
 
-set_compile_options(helloworld_cli)
+set_compile_options(task)
 set_compile_options(version)
 
-install(TARGETS helloworld_cli
+install(TARGETS task
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 # Describe unit tests
 enable_testing()
-add_unit_test(test/test_version.cpp version)
+add_unit_test(test/test_matrix.cpp matrix)
 
 # Packaging
 option(MAKE_PACKAGE "Add 'package' and 'package_source' build targets for packages" ON)
