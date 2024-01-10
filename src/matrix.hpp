@@ -1,8 +1,8 @@
 #pragma once
 
 #include <algorithm>
-#include <map>
 #include <type_traits>
+#include <unordered_map>
 #include <vector>
 
 namespace otus {
@@ -10,17 +10,16 @@ namespace otus {
 struct Position {
     size_t row, column;
 
-    bool operator==(const Position &other) {
+    bool operator==(const Position &other) const {
         return row == other.row && column == other.column;
-    };
+    }
 };
 
-struct PositionComparator {
-    bool operator()(const Position &lhs, const Position &rhs) const {
-        bool upper = lhs.row < rhs.row;
-        bool lower = !upper ? lhs.column < rhs.column : false;
-
-        return upper || lower;
+struct PositionHasher {
+    size_t operator()(const Position &pos) const {
+        auto h1 = std::hash<size_t>{}(pos.row);
+        auto h2 = std::hash<size_t>{}(pos.column);
+        return h1 ^ (h2 << 1);
     }
 };
 
@@ -60,7 +59,7 @@ template <class T, T DefaultValue, size_t Dim = 2> class Matrix {
         Position pos;
     };
 
-    std::map<Position, T, PositionComparator> storage_;
+    std::unordered_map<Position, T, PositionHasher> storage_;
     std::vector<Position> positions_;
     T default_ = DefaultValue;
 
@@ -74,13 +73,13 @@ template <class T, T DefaultValue, size_t Dim = 2> class Matrix {
         //                : origin->storage_[positions[iterator]];
         // }
         T *operator->() {
-            return  origin->positions_.size() == 0
+            return origin->positions_.size() == 0
                        ? nullptr
-                       : &origin->storage_[ origin->positions_[iterator]];
+                       : &origin->storage_[origin->positions_[iterator]];
         }
 
         std::tuple<size_t, size_t, T> operator*() {
-            if ( origin->positions_.size() == 0) {
+            if (origin->positions_.size() == 0) {
                 return std::make_tuple(0, 0, origin->default_);
             }
 
