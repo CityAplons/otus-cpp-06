@@ -27,9 +27,13 @@ target_include_directories(version
 )
 
 # Describe build targets
+add_library(matrix src/matrix.cpp)
+target_include_directories(matrix PUBLIC src)
+
 add_executable(task src/main.cpp)
 target_link_libraries(task PRIVATE
     version
+    matrix
 )
 
 set_compile_options(task)
@@ -41,7 +45,7 @@ install(TARGETS task
 
 # Describe unit tests
 enable_testing()
-# add_unit_test(test/test_version.cpp version)
+add_unit_test(test/test_matrix.cpp matrix)
 
 # Packaging
 option(MAKE_PACKAGE "Add 'package' and 'package_source' build targets for packages" ON)
